@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remove Authorized Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f4f6;
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 30px;
+            color: #374151;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        li {
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #dc2626;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .delete-btn:hover {
+            color: #b91c1c;
+        }
+
+        .username {
+            flex-grow: 1;
+            text-align: left;
+            font-size: 1em;
+            color: #1f2937;
+        }
+
+        .back-button {
+            margin-top: 40px;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border: 2px solid #a1a1aa;
+            border-radius: 10px;
+            background-color: #f9fafb;
+            color: #000;
+            cursor: pointer;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #e5e7eb;
+            border-color: #737373;
+        }
+    </style>
+</head>
+<body>
+    <h1>Remove Authorized Users</h1>
+    <ul>
+        {% for user in users %}
+        <li>
+            <form action="/delete_user/{{ user }}" method="post" style="display: flex; align-items: center;">
+                <button class="delete-btn" type="submit">❌</button>
+                <span class="username">{{ user }}</span>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <form action="/">
+        <button type="submit" class="back-button">⬅️ Back to Main Page</button>
+    </form>
+</body>
+</html>

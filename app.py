@@ -45,13 +45,14 @@ def verify_user():
 
     best_match = None
     best_score = 0
-    THRESHOLD = 0.6
+    THRESHOLD = 0.35
 
     for fname in os.listdir(EMBEDDING_DIR):
         if fname.endswith(".npy"):
             user_name = fname[:-4].replace("_", " ")
             enrolled = np.load(os.path.join(EMBEDDING_DIR, fname)).flatten()
             similarity = 1 - cosine(test_embedding, enrolled)
+            print((similarity, fname))
 
             if similarity > THRESHOLD and similarity > best_score:
                 best_score = similarity
@@ -91,6 +92,29 @@ def record_user():
 
     enroll_user(name)
     return render_template('add_user.html', message=f"Successfully added {name.replace('_', ' ')} as authorized user")
+
+@app.route('/remove_user')
+def remove_user_page():
+    users = []
+    for fname in os.listdir(EMBEDDING_DIR):
+        if fname.endswith(".npy"):
+            name = fname[:-4].replace("_", " ")
+            users.append(name)
+    return render_template('remove_user.html', users=users)
+
+@app.route('/delete_user/<username>', methods=['POST'])
+def delete_user(username):
+    safe_name = username.replace(" ", "_")
+    audio_path = os.path.join(AUDIO_DIR, f"{safe_name}.wav")
+    embedding_path = os.path.join(EMBEDDING_DIR, f"{safe_name}.npy")
+
+    if os.path.exists(audio_path):
+        os.remove(audio_path)
+    if os.path.exists(embedding_path):
+        os.remove(embedding_path)
+
+    return redirect(url_for('remove_user_page'))
+
 
 
 if __name__ == '__main__':
